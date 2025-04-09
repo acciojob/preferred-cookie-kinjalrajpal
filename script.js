@@ -1,34 +1,37 @@
+document.getElementById('fontForm').addEventListener("submit", (e) => {
+  e.preventDefault(); 
 
-//your JS code here. If required.
-let saveInput = document.querySelector('input[type="submit"]')
-saveInput.addEventListener("click",()=>{
-	let fontSize = document.querySelector('#fontsize').value
-	let fontColor = document.querySelector('input[type="color"]').value
-	// console.log(fontSize,fontColor)
-	document.cookie = "fontcolor="+fontColor+"; expires= Fri, 25 June 2023 12:00:00 UTC; path=/";
-	document.cookie = "fontsize="+fontSize+"; expires= Fri, 25 June 2023 12:00:00 UTC; path=/";
-}) 
+  const fontSize = document.getElementById("fontsize").value + "px";
+  const fontColor = document.getElementById("fontcolor").value;
 
-function showCookieValue(){
-let fontSizeCookie = getCookie("fontsize")
-	if(fontSizeCookie){
-		document.querySelector('#fontsize').value = fontSizeCookie 
-	}
-	let fontColorCookie =getCookie("fontcolor")
-	if(fontColorCookie){
-		document.querySelector('input[type="color"]').value = fontColorCookie 
-	}
+  document.cookie = "fontsize=" + fontSize + "; expires=Fri, 31 Dec 2030 12:00:00 UTC; path=/";
+  document.cookie = "fontcolor=" + fontColor + "; expires=Fri, 31 Dec 2030 12:00:00 UTC; path=/";
 
-	
+  // Apply the styles immediately
+  document.documentElement.style.setProperty("--fontsize", fontSize);
+  document.documentElement.style.setProperty("--fontcolor", fontColor);
+});
+
+function showCookieValue() {
+  const fontSizeCookie = getCookie("fontsize");
+  const fontColorCookie = getCookie("fontcolor");
+
+  if (fontSizeCookie) {
+    document.getElementById("fontsize").value = parseInt(fontSizeCookie);
+    document.documentElement.style.setProperty("--fontsize", fontSizeCookie);
+  }
+
+  if (fontColorCookie) {
+    document.getElementById("fontcolor").value = fontColorCookie;
+    document.documentElement.style.setProperty("--fontcolor", fontColorCookie);
+  }
 }
 
-function getCookie(key){
-	let cookies =  document.cookie.split("; ")
-	 .find((row) => row.startsWith(key))
-	if(cookies){
-		return cookies.split("=")[1]
-	}else{
-		return undefined
-	}
-	
+function getCookie(key) {
+  const cookies = document.cookie.split("; ");
+  for (let cookie of cookies) {
+    const [name, value] = cookie.split("=");
+    if (name === key) return value;
+  }
+  return null;
 }
